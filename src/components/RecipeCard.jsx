@@ -1,7 +1,11 @@
 import { useEffect, useState } from "react";
+import RecipeModal from "./RecipeModal";
+
 
 function RecipeCard(props) {
     const [imgUrl, setImgUrl] = useState("");
+    const [showModal, setShowModal] = useState(false);
+    const [currentRecipe, setCurrentRecipe] = useState(null);
 
     useEffect(() => {
         const fetchUrls = async () => {
@@ -21,7 +25,7 @@ function RecipeCard(props) {
 
                 imgUrl = `https://archanaskitchen.com${src}`
             } catch (error) {
-                console.error(error);
+                imgUrl = '/default.png'
             }
             setImgUrl(imgUrl);
         };
@@ -29,12 +33,19 @@ function RecipeCard(props) {
         //eslint-disable-next-line
     }, [])
 
-    let { title, ingredients, recipeUrl, diet, cuisine } = props;
+
+    let { title, ingredients, diet, cuisine, recipeWhole } = props;
     ingredients = ingredients.slice(0, 150);
+
+
+    const onClick = () => {
+        setCurrentRecipe(recipeWhole);
+        setShowModal(true);
+    }
 
     return (
         <>
-            <div className="card" >
+            <div className="card" id="card">
                 <div id="outter">
                     <img src={imgUrl} style={{ position: "absolute", width: "100%", height: "100%", objectFit: "cover" }} alt="..." />
                 </div>
@@ -42,10 +53,16 @@ function RecipeCard(props) {
                     <h5 className="card-title">{title}</h5>
                     <p className="card-text">Ingredients: {ingredients}...</p>
                     <p className="card-text"><small className="text-muted"> Diet: {diet}<br />Cuisine: {cuisine}</small></p>
-                    <a href={recipeUrl} className="btn btn-outline-success btn-sm" target="_blank" rel='noreferrer'>Read More</a>
+                    <button onClick={onClick} className="btn btn-outline-success btn-sm">Read More</button>
                 </div>
-
             </div>
+            {showModal && (
+                <RecipeModal
+                    recipeWhole={currentRecipe}
+                    onClose={() => setShowModal(false)}
+                    show={showModal}
+                />
+            )}
         </>
     )
 }
