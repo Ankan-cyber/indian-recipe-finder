@@ -26,7 +26,8 @@ const Home = (props) => {
         color: "#333"
     }
 
-    const handleSearch = () => {
+    const handleSearch = (e) => {
+        e.preventDefault();
         if (searchTerm === "") {
             toast.error('Empty field', {
                 theme: "light",
@@ -44,7 +45,7 @@ const Home = (props) => {
                 <div className="col-12 my-auto">
                     <h1 className="text-center font-weight-bold head">Indian Recipe Finder</h1>
                     <p className="text-center">Discover endless flavor with over 7000+ delicious recipes, just waiting to be found.</p>
-                    <div className="mt-5 search-container">
+                    <form className="mt-5 search-container" onSubmit={handleSearch}>
                         <input
                             type="text"
                             className="form-control search-bar"
@@ -52,11 +53,10 @@ const Home = (props) => {
                             value={searchTerm}
                             onChange={e => setSearchTerm(e.target.value)}
                         />
-                        <i
+                        <button type="submit" style={{ border: "none", outline: "none" }}><i
                             className="fas fa-search search-icon"
-                            onClick={handleSearch}
-                        ></i>
-                    </div>
+                        ></i></button>
+                    </form>
                 </div>
             </div>
         </header>

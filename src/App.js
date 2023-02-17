@@ -7,7 +7,7 @@ import Home from './components/Home'
 
 function App() {
 
-
+  const apiKey = 'DE79GGe3hQ&aho3&!oJeA6sXDi!yMe';
 
   return (
     <>
