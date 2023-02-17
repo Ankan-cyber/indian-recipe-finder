@@ -53,7 +53,7 @@ const Home = (props) => {
                             value={searchTerm}
                             onChange={e => setSearchTerm(e.target.value)}
                         />
-                        <button type="submit" style={{ border: "none", outline: "none" }}><i
+                        <button type="submit" style={{ border: "none", outline: "none", borderRadius: "50%" }}><i
                             className="fas fa-search search-icon"
                         ></i></button>
                     </form>
