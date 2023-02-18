@@ -10,24 +10,30 @@ function RecipeCard(props) {
     useEffect(() => {
         const fetchUrls = async () => {
             let imgUrl;
-            try {
-                const response = await fetch(props.recipeUrl)
-                const html = await response.text()
-                // Create a parser
-                let parser = new DOMParser();
-                let doc = parser.parseFromString(html, "text/html");
-
-                // Find the image with the class "img-thumbnail"
-                let img = doc.querySelector(".img-thumbnail");
-
-                // Get the src attribute of the image
-                let src = img.getAttribute("src");
-
-                imgUrl = `https://archanaskitchen.com${src}`
-            } catch (error) {
-                imgUrl = '/default.png'
+            if (localStorage.getItem(props.recipeWhole._id) != null) {
+                setImgUrl(localStorage.getItem(props.recipeWhole._id))
             }
-            setImgUrl(imgUrl);
+            else {
+                try {
+                    const response = await fetch(props.recipeUrl)
+                    const html = await response.text()
+                    // Create a parser
+                    let parser = new DOMParser();
+                    let doc = parser.parseFromString(html, "text/html");
+
+                    // Find the image with the class "img-thumbnail"
+                    let img = doc.querySelector(".img-thumbnail");
+
+                    // Get the src attribute of the image
+                    let src = img.getAttribute("src");
+
+                    imgUrl = `https://archanaskitchen.com${src}`
+                } catch (error) {
+                    imgUrl = '/default.png'
+                }
+                setImgUrl(imgUrl);
+                localStorage.setItem(props.recipeWhole._id, imgUrl)
+            }
         };
         fetchUrls();
         //eslint-disable-next-line

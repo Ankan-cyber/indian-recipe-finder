@@ -9,7 +9,6 @@ const RecipeModal = (props) => {
 
     let ingredientsAll = props.recipeWhole.TranslatedIngredients.split(",");
     let TranslatedInstructions = props.recipeWhole.TranslatedInstructions.split(".");
-    console.log(TranslatedInstructions)
 
     return (
         <>
