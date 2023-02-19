@@ -4,6 +4,7 @@ import Spinner from './Spinner'
 import { toast } from 'react-toastify'
 import { useNavigate } from "react-router-dom"
 import InfiniteScroll from 'react-infinite-scroller';
+import Footer from "./Footer"
 
 const SearchRecipes = (props) => {
 
@@ -86,7 +87,7 @@ const SearchRecipes = (props) => {
             </div>
             {loading ? <Spinner /> :
                 recipes.length === 0 ?
-                    <div className="container my-3"><h2 className='text-center'>No Result Found</h2></div> :
+                    <div className="container my-3" style={{ height: "70vh" }}><h2 className='text-center'>No Result Found</h2></div> :
                     <div className="container my-3">
                         {
                             <InfiniteScroll
@@ -101,9 +102,10 @@ const SearchRecipes = (props) => {
                                 </div>
                             </InfiniteScroll>
                         }
+
                     </div>
             }
-
+            <Footer />
         </>
 
     )

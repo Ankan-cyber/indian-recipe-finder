@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify'
+import Footer from './Footer';
 
 const Home = (props) => {
 
@@ -23,7 +24,8 @@ const Home = (props) => {
         justifyContent: "center",
         transition: "all 0.3s ease",
         fontWeight: "600 !important",
-        color: "#333"
+        color: "#333",
+        flexDirection: "column"
     }
 
     const handleSearch = (e) => {
@@ -59,6 +61,7 @@ const Home = (props) => {
                     </form>
                 </div>
             </div>
+            <Footer />
         </header>
     )
 }
