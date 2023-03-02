@@ -68,7 +68,6 @@ const SearchRecipes = (props) => {
 
     const BackToHomepage = () => {
         navigate('/')
-        localStorage.clear()
     }
     useEffect(() => {
         const searchParams = new URLSearchParams(window.location.search);

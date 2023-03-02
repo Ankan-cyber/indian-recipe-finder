@@ -9,6 +9,7 @@ const Home = (props) => {
     const [searchTerm, setSearchTerm] = useState('');
 
     useEffect(() => {
+	localStorage.clear()
         fetch('http://localhost:5000/?q=alooha', {
             method: "GET",
             headers: {
