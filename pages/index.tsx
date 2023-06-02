@@ -14,7 +14,6 @@ export default function Home() {
   }, [])
 
   let header: CSSProperties = {
-    backgroundColor: "#f2f2f2",
     height: "100vh",
     display: "flex",
     alignItems: "center",
@@ -44,7 +43,7 @@ export default function Home() {
         <meta name="description" content="Search Indian Recipes as you like we have over 7000 indian recipes" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
-      <header className="container-fluid py-3" style={header}>
+      <header className="container-fluid py-3 main" style={header}>
         <div className="flex h-full">
           <div className="col-12 my-auto">
             <h1 className="text-center text-3xl xl:text-4xl mb-4">Indian Recipe Finder</h1>
