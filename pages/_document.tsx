@@ -7,7 +7,7 @@ export default function Document() {
       <link rel="icon" href="/favicon.ico" />
       <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
       <Head />
-      <body>
+      <body >
         <Main />
         <NextScript />
       </body>

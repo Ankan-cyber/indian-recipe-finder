@@ -49,7 +49,7 @@ function RecipeCard(props: Recipe) {
     }, [])
 
 
-    let { title, ingredients, diet, cuisine, id } = props;
+    let { title, ingredients, diet, cuisine } = props;
     ingredients = ingredients.slice(0, 150);
 
 

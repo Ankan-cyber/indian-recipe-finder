@@ -1,4 +1,4 @@
-import { useState, useEffect, FormEvent, SetStateAction } from "react"
+import { useState, useEffect, SetStateAction } from "react"
 import RecipeCard from '../components/RecipeCard'
 import Spinner from '../components/Spinner'
 import InfiniteScroll from 'react-infinite-scroller';
@@ -22,7 +22,7 @@ const SearchRecipes: NextPage<PageProps> = ({ result, success }) => {
     const [cuisines, setCuisines] = useState<{ label: string, value: string }[]>([])
     const [dietfilter, setDietfilter] = useState<SelectOption[]>([]);
     const [cuisinefilter, setCuisinefilter] = useState<SelectOption[]>([]);
-    const [page, setPage] = useState(1)
+    const [page, setPage] = useState(0)
     const [recipeEnd, setRecipeEnd] = useState(6)
     const { q } = router.query;
 
@@ -49,18 +49,14 @@ const SearchRecipes: NextPage<PageProps> = ({ result, success }) => {
             }));
             setDiets(dietObjects as SetStateAction<{ label: string; value: string; }[]>);
             setCuisines(cuisineObjects as SetStateAction<{ label: string; value: string; }[]>);
-            setDietfilter([dietObjects[0]])
-            setCuisinefilter([cuisineObjects[0]])
+            const filter = localStorage.getItem('filter');
+            if (filter) {
+                setDietfilter(JSON.parse(filter).dietfilter)
+                setCuisinefilter(JSON.parse(filter).cuisinefilter)
+            }
         }
     }, [])
 
-    const handleNextClick = () => {
-        if (page < Math.ceil(result.length / 6)) {
-            setPage(page + 1)
-            setRecipeEnd(recipeEnd + 6)
-            RenderRecipes(0, recipeEnd)
-        }
-    }
 
     const RenderRecipes = (start: number, end: number) => {
         let resultCopy = structuredClone(result)
@@ -85,21 +81,44 @@ const SearchRecipes: NextPage<PageProps> = ({ result, success }) => {
             }
         }
 
+        const handleNextClick = () => {
+            if (page < Math.ceil(resultCopy.length / 6)) {
+                setPage(page + 1)
+                setRecipeEnd(recipeEnd + 6)
+                RenderRecipes(0, recipeEnd)
+            }
+        }
+
         return (
             <>
-                {resultCopy.slice(start, end).map((e: any) => {
-                    e.URL = e.URL.replace("http://", "https://");
-                    const goto = () => {
-                        let data = window.pageYOffset;
-                        localStorage.setItem('searchpage', JSON.stringify(data));
-                        router.push(`/recipe/${e._id}`)
-                    }
-                    return (
-                        <div className='md:w-4/12 p-3' key={e.Srno} >
-                            <RecipeCard title={e.RecipeName} ingredients={e.TranslatedIngredients} recipeUrl={e.URL} diet={e.Diet} cuisine={e.Cuisine} id={e._id} goto={goto} />
+                {resultCopy.length === 0 ?
+                    <div className="flex flex-wrap justify-center mt-7 h-[50vh]"><h2 className='text-center text-2xl'>No Result Found</h2></div>
+                    :
+                    <InfiniteScroll
+                        pageStart={0}
+                        loadMore={handleNextClick}
+                        hasMore={Math.ceil(resultCopy.length / 6) != page}
+                        loader={<Spinner key={Math.floor(Math.random() * 51)} />}
+                        threshold={-10}
+                    >
+                        <div className="flex flex-wrap justify-center my-4" key={Math.random() + 1}>
+                            {resultCopy.slice(start, end).map((e: any) => {
+                                e.URL = e.URL.replace("http://", "https://");
+                                const goto = () => {
+                                    let data = window.pageYOffset;
+                                    localStorage.setItem('searchpage', JSON.stringify(data));
+                                    localStorage.setItem('filter', JSON.stringify({ dietfilter, cuisinefilter }))
+                                    router.push(`/recipe/${e._id}`)
+                                }
+                                return (
+                                    <div className='md:w-4/12 p-3' key={e.Srno} >
+                                        <RecipeCard title={e.RecipeName} ingredients={e.TranslatedIngredients} recipeUrl={e.URL} diet={e.Diet} cuisine={e.Cuisine} id={e._id} goto={goto} />
+                                    </div>
+                                );
+                            })}
                         </div>
-                    );
-                })}
+                    </InfiniteScroll>
+                }
             </>
         );
     }
@@ -140,17 +159,7 @@ const SearchRecipes: NextPage<PageProps> = ({ result, success }) => {
                         </div>
                     </div>
                     {
-                        <InfiniteScroll
-                            pageStart={0}
-                            loadMore={handleNextClick}
-                            hasMore={Math.ceil(result.length / 6) === page ? false : true}
-                            loader={<Spinner key={Math.floor(Math.random() * 51)} />}
-                            threshold={-10}
-                        >
-                            <div className="flex flex-wrap justify-center my-4" key={Math.random() + 1}>
-                                {RenderRecipes(0, recipeEnd)}
-                            </div>
-                        </InfiniteScroll>
+                        RenderRecipes(0, recipeEnd)
                     }
 
                 </div>

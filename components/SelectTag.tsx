@@ -95,19 +95,23 @@ export function SelectTag({ multiple, value, onChange, options }: SelectProps) {
         >
             <span className={styles.value}>
                 {multiple
-                    ? value.map(v => (
-                        <button
-                            key={v.value}
-                            onClick={e => {
-                                e.stopPropagation()
-                                selectOption(v)
-                            }}
-                            className={styles["option-badge"]}
-                        >
-                            {v.label}
-                            <span className={styles["remove-btn"]}>&times;</span>
-                        </button>
-                    ))
+                    ?
+                    value.length === 0 ?
+                        <p className="cursor-default">Select Option</p>
+                        :
+                        value.map(v => (
+                            <button
+                                key={v.value}
+                                onClick={e => {
+                                    e.stopPropagation()
+                                    selectOption(v)
+                                }}
+                                className={styles["option-badge"]}
+                            >
+                                {v.label}
+                                <span className={styles["remove-btn"]}>&times;</span>
+                            </button>
+                        ))
                     : value?.label}
             </span>
             <button
@@ -138,6 +142,6 @@ export function SelectTag({ multiple, value, onChange, options }: SelectProps) {
                     </li>
                 ))}
             </ul>
-        </div>
+        </div >
     )
 }
