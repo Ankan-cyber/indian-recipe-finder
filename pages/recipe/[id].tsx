@@ -4,8 +4,9 @@ import { GetServerSideProps } from 'next';
 import Error from "next/error"
 import mongoose from 'mongoose'
 import { ObjectId } from 'mongodb'
-import RecipeData from "@/components/RecipeData";
+import RecipeData from "@/types/RecipeData";
 import Footer from "@/components/Footer";
+import { motion } from 'framer-motion'
 
 interface PageProps {
     success: boolean,
@@ -15,7 +16,6 @@ interface PageProps {
 
 function Id(props: PageProps) {
     const router = useRouter();
-    const { id } = router.query;
 
     let ingredientsAll = props.result?.TranslatedIngredients.split(",");
     let TranslatedInstructions = props.result?.TranslatedInstructions.split(".");
@@ -33,7 +33,13 @@ function Id(props: PageProps) {
                 <Head>
                     <title>{props.result?.RecipeName}</title>
                 </Head>
-                <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 mt-12">
+                <motion.div
+                    className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 mt-12"
+                    initial={{ opacity: 0.5, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 20 }}
+                    transition={{ duration: 0.7 }}
+                >
                     <i className="fas fa-arrow-left search-icon" onClick={BackToHomepage}></i>
                     <div className="max-w-4xl mx-auto py-8 px-4">
                         <h1 className="text-3xl font-bold mb-4">{props.result?.RecipeName}</h1>
@@ -113,7 +119,7 @@ function Id(props: PageProps) {
                             </ol>
                         </div>
                     </div>
-                </div >
+                </motion.div >
                 <Footer />
             </>
         )

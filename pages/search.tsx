@@ -7,7 +7,7 @@ import { GetServerSideProps, NextPage } from 'next';
 import { useRouter } from "next/router";
 import { SelectTag, SelectOption } from "../components/SelectTag";
 import mongoose from 'mongoose';
-
+import { motion } from 'framer-motion'
 
 interface PageProps {
     success: boolean,
@@ -92,7 +92,15 @@ const SearchRecipes: NextPage<PageProps> = ({ result, success }) => {
         return (
             <>
                 {resultCopy.length === 0 ?
-                    <div className="flex flex-wrap justify-center mt-7 h-[50vh]"><h2 className='text-center text-2xl'>No Result Found</h2></div>
+                    <motion.div
+                        className="flex flex-wrap justify-center mt-7 h-[50vh]"
+                        initial={{ opacity: 0.5, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 20 }}
+                        transition={{ duration: 0.7 }}
+                    >
+                        <h2 className='text-center text-2xl'>No Result Found</h2>
+                    </motion.div>
                     :
                     <InfiniteScroll
                         pageStart={0}
@@ -111,9 +119,15 @@ const SearchRecipes: NextPage<PageProps> = ({ result, success }) => {
                                     router.push(`/recipe/${e._id}`)
                                 }
                                 return (
-                                    <div className='md:w-4/12 p-3' key={e.Srno} >
+                                    <motion.div
+                                        className='md:w-4/12 p-3' key={e.Srno}
+                                        initial={{ opacity: 0.5, y: 20 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        exit={{ opacity: 0, y: 20 }}
+                                        transition={{ duration: 0.7 }}
+                                    >
                                         <RecipeCard title={e.RecipeName} ingredients={e.TranslatedIngredients} recipeUrl={e.URL} diet={e.Diet} cuisine={e.Cuisine} id={e._id} goto={goto} />
-                                    </div>
+                                    </motion.div>
                                 );
                             })}
                         </div>
@@ -129,7 +143,12 @@ const SearchRecipes: NextPage<PageProps> = ({ result, success }) => {
 
 
     return (
-        <>
+        <motion.div
+            initial={{ opacity: 0.5, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 20 }}
+            transition={{ duration: 0.7 }}
+        >
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 mt-12">
                 <i className="fas fa-arrow-left search-icon" onClick={BackToHomepage}></i>
                 <h1 className="text-center text-3xl xl:text-4xl ">Search Results: {q}</h1>
@@ -158,14 +177,11 @@ const SearchRecipes: NextPage<PageProps> = ({ result, success }) => {
                             />
                         </div>
                     </div>
-                    {
-                        RenderRecipes(0, recipeEnd)
-                    }
-
+                    {RenderRecipes(0, recipeEnd)}
                 </div>
             }
             <Footer />
-        </>
+        </motion.div>
 
     )
 }
