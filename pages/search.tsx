@@ -97,7 +97,6 @@ const SearchRecipes: NextPage<PageProps> = ({ result, success }) => {
                         initial={{ opacity: 0.5, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: 20 }}
-                        transition={{ duration: 0.7 }}
                     >
                         <h2 className='text-center text-2xl'>No Result Found</h2>
                     </motion.div>
@@ -121,10 +120,14 @@ const SearchRecipes: NextPage<PageProps> = ({ result, success }) => {
                                 return (
                                     <motion.div
                                         className='md:w-4/12 p-3' key={e.Srno}
-                                        initial={{ opacity: 0.5, y: 20 }}
-                                        animate={{ opacity: 1, y: 0 }}
-                                        exit={{ opacity: 0, y: 20 }}
-                                        transition={{ duration: 0.7 }}
+                                        initial={{ x: 40, opacity: 0 }}
+                                        animate={{ x: 0, opacity: 1 }}
+                                        exit={{ x: 40, opacity: 0 }}
+                                        transition={{
+                                            type: "spring",
+                                            stiffness: 260,
+                                            damping: 20,
+                                        }}
                                     >
                                         <RecipeCard title={e.RecipeName} ingredients={e.TranslatedIngredients} recipeUrl={e.URL} diet={e.Diet} cuisine={e.Cuisine} id={e._id} goto={goto} />
                                     </motion.div>
@@ -144,10 +147,10 @@ const SearchRecipes: NextPage<PageProps> = ({ result, success }) => {
 
     return (
         <motion.div
-            initial={{ opacity: 0.5, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 20 }}
-            transition={{ duration: 0.7 }}
+            initial={{ opacity: 0.5, scale: 0.7 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.7 }}
+            transition={{ duration: 0.5 }}
         >
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 mt-12">
                 <i className="fas fa-arrow-left search-icon" onClick={BackToHomepage}></i>
