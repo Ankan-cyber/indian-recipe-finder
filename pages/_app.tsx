@@ -18,6 +18,14 @@ export default function App({ Component, pageProps }: AppProps) {
     router.events.on('routeChangeComplete', () => {
       setProgress(100)
     })
+    return () => {
+      router.events.on('routeChangeStart', () => {
+        setProgress(Math.floor(Math.random() * 40))
+      })
+      router.events.on('routeChangeComplete', () => {
+        setProgress(100)
+      })
+    }
   }, [router.events])
   return <>
     <LoadingBar

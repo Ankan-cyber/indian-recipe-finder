@@ -45,8 +45,7 @@ function RecipeCard(props: Recipe) {
         };
         fetchUrls();
 
-        //eslint-disable-next-line
-    }, [])
+    }, [props.id, props.recipeUrl])
 
 
     let { title, ingredients, diet, cuisine } = props;

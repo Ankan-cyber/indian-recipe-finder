@@ -24,6 +24,7 @@ const SearchRecipes: NextPage<PageProps> = ({ result, success }) => {
     const [cuisinefilter, setCuisinefilter] = useState<SelectOption[]>([]);
     const [page, setPage] = useState(0)
     const [recipeEnd, setRecipeEnd] = useState(6)
+    const [buttonClicked, setButtonClicked] = useState(false);
     const { q } = router.query;
 
 
@@ -55,7 +56,7 @@ const SearchRecipes: NextPage<PageProps> = ({ result, success }) => {
                 setCuisinefilter(JSON.parse(filter).cuisinefilter)
             }
         }
-    }, [])
+    }, [result, success])
 
 
     const RenderRecipes = (start: number, end: number) => {
@@ -142,14 +143,17 @@ const SearchRecipes: NextPage<PageProps> = ({ result, success }) => {
 
     const BackToHomepage = () => {
         router.push('..')
+        router.events.on('routeChangeStart', () => {
+            setButtonClicked(true)
+        })
     }
 
 
     return (
         <motion.div
-            initial={{ opacity: 0.5, scale: 0.7 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.7 }}
+            initial={{ opacity: 0, x: "-100%" }}
+            animate={buttonClicked ? { opacity: 0, x: "100%" } : { opacity: 1, x: 0 }}
+            exit={buttonClicked ? { opacity: 0, x: "100%" } : { opacity: 1, x: 0 }}
             transition={{ duration: 0.5 }}
         >
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 mt-12">
@@ -228,4 +232,3 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async (context)
 };
 
 export default SearchRecipes
-
