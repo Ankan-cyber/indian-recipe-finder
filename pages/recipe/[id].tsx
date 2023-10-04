@@ -1,12 +1,13 @@
-import { useRouter } from "next/router"
+import { useRouter } from "next/router";
 import Head from "next/head";
 import { GetServerSideProps } from 'next';
-import Error from "next/error"
-import mongoose from 'mongoose'
-import { ObjectId } from 'mongodb'
+import Error from "next/error";
+import mongoose from 'mongoose';
+import { ObjectId } from 'mongodb';
 import RecipeData from "@/types/RecipeData";
 import Footer from "@/components/Footer";
-import { motion } from 'framer-motion'
+import { motion } from 'framer-motion';
+import { useEffect } from 'react';
 
 interface PageProps {
     success: boolean,
@@ -16,6 +17,41 @@ interface PageProps {
 
 function Id(props: PageProps) {
     const router = useRouter();
+
+    useEffect(() => {
+        // Load Google Translate API
+        const script = document.createElement('script');
+        script.src = 'https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
+        script.async = true;
+        document.head.appendChild(script);
+
+        // Initialize Google Translate
+        window.googleTranslateElementInit = () => {
+            new window.google.translate.TranslateElement(
+                { pageLanguage: 'en', autoDisplay: false },
+                'google_translate_element'
+            );
+        };
+        window.addEventListener('load', () => {
+
+            const div = document.querySelector('.goog-te-gadget');
+
+            const keepEl = div.querySelector('#\\:0\\.targetLanguage');
+
+            const children = Array.from(div.children);
+
+            const toRemove = children.filter(el => el !== keepEl);
+
+            toRemove.forEach(el => el.remove());
+            div.childNodes.forEach(node => {
+                if (node.nodeType === 3) {
+                    div.removeChild(node);
+                }
+            });
+
+        });
+    }, []);
+
 
     let ingredientsAll = props.result?.TranslatedIngredients.split(",");
     let TranslatedInstructions = props.result?.TranslatedInstructions.split(".");
@@ -40,7 +76,10 @@ function Id(props: PageProps) {
                     exit={{ opacity: 0, y: 20 }}
                     transition={{ duration: 0.7 }}
                 >
-                    <i className="fas fa-arrow-left search-icon" onClick={BackToHomepage}></i>
+                    <div className="flex justify-between">
+                        <i className="fas fa-arrow-left search-icon" onClick={BackToHomepage}></i>
+                        <div id='google_translate_element' className="pt-1.5 pr-1.5 pl-2.5"></div>
+                    </div>
                     <div className="max-w-4xl mx-auto py-8 px-4">
                         <h1 className="text-3xl font-bold mb-4">{props.result?.RecipeName}</h1>
                         <div className="mb-4">
