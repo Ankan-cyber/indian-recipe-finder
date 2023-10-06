@@ -4,10 +4,11 @@ import { GetServerSideProps } from 'next';
 import Error from "next/error";
 import mongoose from 'mongoose';
 import { ObjectId } from 'mongodb';
-import RecipeData from "@/types/RecipeData";
+import RecipeData from "@/lib/types/RecipeData";
 import Footer from "@/components/Footer";
 import { motion } from 'framer-motion';
 import { useEffect } from 'react';
+import translate from "@/lib/translate"
 
 interface PageProps {
     success: boolean,
@@ -19,21 +20,8 @@ function Id(props: PageProps) {
     const router = useRouter();
 
     useEffect(() => {
-        // Load Google Translate API
-        const script = document.createElement('script');
-        script.src = 'https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
-        script.async = true;
-        document.head.appendChild(script);
-
-        // Initialize Google Translate
-        window.googleTranslateElementInit = () => {
-            new window.google.translate.TranslateElement(
-                { pageLanguage: 'en', autoDisplay: false },
-                'google_translate_element'
-            );
-        };
-        window.addEventListener('load', () => {
-
+        translate();
+        setTimeout(() => {
             const div = document.querySelector('.goog-te-gadget');
 
             const keepEl = div.querySelector('#\\:0\\.targetLanguage');
@@ -48,8 +36,7 @@ function Id(props: PageProps) {
                     div.removeChild(node);
                 }
             });
-
-        });
+        }, 1000);
     }, []);
 
 
